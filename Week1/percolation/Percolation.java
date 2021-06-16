@@ -9,21 +9,27 @@ public class Percolation {
     UF cellComponentID;
     boolean cellOpenStatus[];
     int N=0;
+    int NN=0;
 
 
-    private int rowCol2rc(int row, int  col) {
+    private int rowCol2rc(int row, int  col) throws Exception {
         //row: 1, 2, ..., n
         //col: 1, 2, ..., n
         //rc: n*(row-1) + (col-1) = 0, 1, 2, 3, ..., (n^2-1)
 
-        return N*(row-1) + (col-1) + 1;
+        int val = N*(row-1) + (col-1);
+
+        if (val < 0 || val >= NN) throw new IllegalArgumentException();
+
+        return val;
     }
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         N = n;
-        cellComponentID = new UF(N*N);
-        cellOpenStatus = new boolean[N*N];
+        NN = n*n;
+        cellComponentID = new UF(NN);
+        cellOpenStatus = new boolean[NN];
 
         for(int i=0; i < N*N; ++i) cellOpenStatus[i] = false;
 
@@ -31,25 +37,30 @@ public class Percolation {
 
     // opens the site (row, col) if it is not already open
     public void open(int row, int col) {
-        int rc = rowCol2rc(row, col);
+        try {
+            int rc = rowCol2rc(row, col);
 
-        if (cellOpenStatus[rc] == false) {
-            cellOpenStatus[rc] = true;
+            if (cellOpenStatus[rc] == false) {
+                cellOpenStatus[rc] = true;
 
-            //connect the cell to its {UP,DOWN,LEFT,RIGHT} open neighbors
-            int rc_neighbor;
-            rc_neighbor = rowCol2rc(row-1, col);
-            if (isOpen(row-1, col)) cellComponentID.union(rc, rc_neighbor);
+                // join the cell to its {UP,DOWN,LEFT,RIGHT} open neighbors
+                join(row, col, row - 1, col);   // UP
+                join(row, col, row + 1, col);   // DOWN
+                join(row, col, row, col - 1);   // LEFT
+                join(row, col, row, col + 1);   // RIGHT
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            rc_neighbor = rowCol2rc(row+1, col);
-            if (isOpen(row+1, col)) cellComponentID.union(rc, rc_neighbor);
-
-            rc_neighbor = rowCol2rc(row, col+1);
-            if (isOpen(row, col+1)) cellComponentID.union(rc, rc_neighbor);
-
-            rc_neighbor = rowCol2rc(row, col-1);
-            if (isOpen(row, col-1)) cellComponentID.union(rc, rc_neighbor);
-
+    private void join(int row1, int col1, int row2, int col2) throws Exception {
+        try {
+            int rc1 = rowCol2rc(row1, col1);
+            int rc2 = rowCol2rc(row2, col2);
+            if (isOpen(row2, col2)) cellComponentID.union(rc1, rc2);
+        } catch(Exception e) {
+            //e.printStackTrace();
         }
     }
 
@@ -58,25 +69,35 @@ public class Percolation {
         boolean status = false;
         int rc;
 
-        rc = rowCol2rc(row, col);
-        status = cellOpenStatus[rc];
+        try {
+            rc = rowCol2rc(row, col);
+            status = cellOpenStatus[rc];
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         return status;
     }
 
-    // a cell is FULL if it is connected to any cell in the top row
+    // a cell is FULL if it is open and connected to any open cell in the top row
     public boolean isFull(int row, int col) {
         boolean status = false;
         int rc1, rc2;
 
-        rc1 = rowCol2rc(row, col);
+        try {
+            rc1 = rowCol2rc(row, col);
 
-        for(int i = 1; i <= N; ++i) {
-            rc2 = rowCol2rc(i, 1);
-            if (cellComponentID.find(rc1) == cellComponentID.find(rc2)) {
-                status = true;
-                break;
+            for (int j = 1; j <= N; ++j) {
+                rc2 = rowCol2rc(1, j);
+                if (cellOpenStatus[rc1] && cellOpenStatus[rc2]) {
+                    if (cellComponentID.find(rc1) == cellComponentID.find(rc2)) {
+                        status = true;
+                        break;
+                    }
+                }
             }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
         return status;
@@ -99,16 +120,20 @@ public class Percolation {
         int rc_top, rc_bottom;
         boolean status = false;
 
-        for(int i=1; i<=N; ++i) {
-            for(int j=1; j<=N; ++j) {
-                rc_top = rowCol2rc(1, i);
-                rc_bottom = rowCol2rc(N, j);
+        try {
+            for (int i = 1; i <= N; ++i) {
+                for (int j = 1; j <= N; ++j) {
+                    rc_top = rowCol2rc(1, i);
+                    rc_bottom = rowCol2rc(N, j);
 
-                if (cellComponentID.find(rc_top) == cellComponentID.find(rc_bottom)) {
-                    status = true;
-                    break;
+                    if (cellComponentID.find(rc_top) == cellComponentID.find(rc_bottom)) {
+                        status = true;
+                        break;
+                    }
                 }
             }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
         return status;
@@ -127,8 +152,6 @@ public class Percolation {
         if (grid.find(0) == grid.find(8)) {
             int i=0;
         }
-
-
     }
 
 }
