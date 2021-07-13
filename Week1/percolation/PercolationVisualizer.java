@@ -70,6 +70,7 @@ public class PercolationVisualizer {
 
         // repeatedly read in sites to open and draw resulting system
         Percolation perc = new Percolation(n);
+        boolean pp = perc.percolates();
         draw(perc, n);
         StdDraw.show();
         StdDraw.pause(DELAY);

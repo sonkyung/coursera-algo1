@@ -5,14 +5,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-
-    //private UF cellComponentID;
     private WeightedQuickUnionUF cellComponentID;
-
     private boolean cellOpenStatus[];
     private int N=0;
     private int NN=0;
-
 
     private int rowCol2rc(int row, int  col) {
         //row: 1, 2, ..., n
@@ -21,6 +17,8 @@ public class Percolation {
 
         int val = N*(row-1) + (col-1);
 
+        if (row < 1 || row > N) throw new IllegalArgumentException();
+        if (col < 1 || col > N) throw new IllegalArgumentException();
         if (val < 0 || val >= NN) throw new IllegalArgumentException();
 
         return val;
@@ -28,6 +26,8 @@ public class Percolation {
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
+        if (n < 1) throw new IllegalArgumentException();
+
         N = n;
         NN = n*n;
         cellComponentID = new WeightedQuickUnionUF(NN);
@@ -48,14 +48,15 @@ public class Percolation {
                 cellOpenStatus[rc] = true;
 
                 // join the cell to its {UP,DOWN,LEFT,RIGHT} open neighbors
-                if((row - 1) >= 1) join(row, col, row - 1, col);   // UP
-                if((row + 1) <= N) join(row, col, row + 1, col);   // DOWN
-                if((col - 1) >= 1) join(row, col, row, col - 1);   // LEFT
-                if((col + 1) <= N) join(row, col, row, col + 1);   // RIGHT
+                if ((row - 1) >= 1) join(row, col, row - 1, col);   // UP
+                if ((row + 1) <= N) join(row, col, row + 1, col);   // DOWN
+                if ((col - 1) >= 1) join(row, col, row, col - 1);   // LEFT
+                if ((col + 1) <= N) join(row, col, row, col + 1);   // RIGHT
 
             }
         } catch(IllegalArgumentException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -63,7 +64,7 @@ public class Percolation {
         try {
             int rc1 = rowCol2rc(row1, col1);
             int rc2 = rowCol2rc(row2, col2);
-            if (isOpen(row2, col2)) cellComponentID.union(rc1, rc2);
+            if (cellOpenStatus[rc2]) cellComponentID.union(rc1, rc2);
         } catch(IllegalArgumentException e) {
             //e.printStackTrace();
         }
@@ -82,6 +83,7 @@ public class Percolation {
             status = cellOpenStatus[rc];
         } catch(IllegalArgumentException e) {
             //e.printStackTrace();
+            throw new IllegalArgumentException();
         }
 
         return status;
@@ -108,7 +110,8 @@ public class Percolation {
                 }
             }
         } catch(IllegalArgumentException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new IllegalArgumentException();
         }
 
         return status;
@@ -118,15 +121,15 @@ public class Percolation {
     public int numberOfOpenSites() {
         int sum = 0;
 
-        for(int rc=0; rc<N*N; ++rc) {
-            if(cellOpenStatus[rc]) sum += 1;
+        for (int rc=0; rc<N*N; ++rc) {
+            if (cellOpenStatus[rc]) sum += 1;
         }
 
         return sum;
     }
 
     // does the system percolate?
-    // the system percolates if any cell in top row is connected to any cell in bottom row
+    // the system percolates if any open cell in top row is connected to any cell in bottom row
     public boolean percolates() {
         int rc_top, rc_bottom;
         boolean status = false;
@@ -137,14 +140,17 @@ public class Percolation {
                     rc_top = rowCol2rc(1, i);
                     rc_bottom = rowCol2rc(N, j);
 
-                    if (cellComponentID.find(rc_top) == cellComponentID.find(rc_bottom)) {
-                        status = true;
-                        break;
+                    if (isOpen(1,i)) {
+                        if (cellComponentID.find(rc_top) == cellComponentID.find(rc_bottom)) {
+                            status = true;
+                            break;
+                        }
                     }
                 }
             }
         } catch(IllegalArgumentException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new IllegalArgumentException();
         }
 
         return status;
@@ -152,9 +158,10 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
+        Percolation perc = new Percolation(2);
+        WeightedQuickUnionUF grid = new WeightedQuickUnionUF(2*2);
 
-        int n = 3;
-        WeightedQuickUnionUF grid = new WeightedQuickUnionUF(n*n);
+        boolean bp = perc.percolates();
 
         grid.union(0,3);
         grid.union(3, 8);
