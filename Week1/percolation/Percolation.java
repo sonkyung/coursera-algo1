@@ -2,17 +2,19 @@
 
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.UF;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    UF cellComponentID;
-    boolean cellOpenStatus[];
-    int N=0;
-    int NN=0;
+    //private UF cellComponentID;
+    private WeightedQuickUnionUF cellComponentID;
+
+    private boolean cellOpenStatus[];
+    private int N=0;
+    private int NN=0;
 
 
-    private int rowCol2rc(int row, int  col) throws Exception {
+    private int rowCol2rc(int row, int  col) {
         //row: 1, 2, ..., n
         //col: 1, 2, ..., n
         //rc: n*(row-1) + (col-1) = 0, 1, 2, 3, ..., (n^2-1)
@@ -28,7 +30,7 @@ public class Percolation {
     public Percolation(int n) {
         N = n;
         NN = n*n;
-        cellComponentID = new UF(NN);
+        cellComponentID = new WeightedQuickUnionUF(NN);
         cellOpenStatus = new boolean[NN];
 
         for(int i=0; i < N*N; ++i) cellOpenStatus[i] = false;
@@ -37,6 +39,8 @@ public class Percolation {
 
     // opens the site (row, col) if it is not already open
     public void open(int row, int col) {
+        // row: 1,2,3,...,n
+        // col: 1,2,3,...,n
         try {
             int rc = rowCol2rc(row, col);
 
@@ -44,36 +48,40 @@ public class Percolation {
                 cellOpenStatus[rc] = true;
 
                 // join the cell to its {UP,DOWN,LEFT,RIGHT} open neighbors
-                join(row, col, row - 1, col);   // UP
-                join(row, col, row + 1, col);   // DOWN
-                join(row, col, row, col - 1);   // LEFT
-                join(row, col, row, col + 1);   // RIGHT
+                if((row - 1) >= 1) join(row, col, row - 1, col);   // UP
+                if((row + 1) <= N) join(row, col, row + 1, col);   // DOWN
+                if((col - 1) >= 1) join(row, col, row, col - 1);   // LEFT
+                if((col + 1) <= N) join(row, col, row, col + 1);   // RIGHT
+
             }
-        } catch(Exception e) {
+        } catch(IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
-    private void join(int row1, int col1, int row2, int col2) throws Exception {
+    private void join(int row1, int col1, int row2, int col2) {
         try {
             int rc1 = rowCol2rc(row1, col1);
             int rc2 = rowCol2rc(row2, col2);
             if (isOpen(row2, col2)) cellComponentID.union(rc1, rc2);
-        } catch(Exception e) {
+        } catch(IllegalArgumentException e) {
             //e.printStackTrace();
         }
     }
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
+        // row: 1,2,3,...,n
+        // col: 1,2,3,...,n
+
         boolean status = false;
         int rc;
 
         try {
             rc = rowCol2rc(row, col);
             status = cellOpenStatus[rc];
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(IllegalArgumentException e) {
+            //e.printStackTrace();
         }
 
         return status;
@@ -81,6 +89,9 @@ public class Percolation {
 
     // a cell is FULL if it is open and connected to any open cell in the top row
     public boolean isFull(int row, int col) {
+        // row: 1,2,3,...,n
+        // col: 1,2,3,...,n
+
         boolean status = false;
         int rc1, rc2;
 
@@ -96,7 +107,7 @@ public class Percolation {
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch(IllegalArgumentException e) {
             e.printStackTrace();
         }
 
@@ -107,7 +118,7 @@ public class Percolation {
     public int numberOfOpenSites() {
         int sum = 0;
 
-        for(int rc=0; rc<=N*N; ++rc) {
+        for(int rc=0; rc<N*N; ++rc) {
             if(cellOpenStatus[rc]) sum += 1;
         }
 
@@ -132,7 +143,7 @@ public class Percolation {
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch(IllegalArgumentException e) {
             e.printStackTrace();
         }
 
@@ -143,7 +154,7 @@ public class Percolation {
     public static void main(String[] args) {
 
         int n = 3;
-        UF grid = new UF(n*n);
+        WeightedQuickUnionUF grid = new WeightedQuickUnionUF(n*n);
 
         grid.union(0,3);
         grid.union(3, 8);
