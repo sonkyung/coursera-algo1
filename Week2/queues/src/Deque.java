@@ -149,7 +149,7 @@ class MyLinkedList<Item> implements Iterable<Item> {
     }
 
     public void addFirst(Item obj) {
-        Node nd = new Node(obj);
+        Node<Item> nd = new Node<Item>(obj);
         if (size > 0) {
             nd.next = head;
             head = nd;
@@ -163,7 +163,7 @@ class MyLinkedList<Item> implements Iterable<Item> {
     }
 
     public void addLast(Item obj) {
-        Node nd = new Node(obj);
+        Node<Item> nd = new Node<Item>(obj);
         if (size > 0) {
             nd.next = null;
             tail.next = nd;
