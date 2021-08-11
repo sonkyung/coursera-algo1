@@ -74,30 +74,28 @@ public class Deque<Item> implements Iterable<Item>{
 
         dq.addFirst(1);
         dq.addFirst(2);
-        dq.addFirst(3);
-        dq.addFirst(4);
 
 
-        System.out.println("empty==false? = " + dq.isEmpty());
-        System.out.println("size==4? = " + dq.size());
-
+        //System.out.println("empty==false? = " + dq.isEmpty());
+        //System.out.println("size==2? = " + dq.size());
         //dq.addLast("A");
         //dq.addFirst("E");
 
 
-        System.out.println(dq.toString());
+        //System.out.println(dq.toString());
 
         //dq.removeFirst();
         //dq.removeLast();
 
-        System.out.println(dq.toString());
+        //System.out.println(dq.toString());
 
         Iterator<Integer> itr = dq.iterator();
         while (itr.hasNext()) {
             Integer val = itr.next();
             System.out.print(val + " -> ");
         }
-        System.out.println(itr.next() + " -> null");
+        System.out.println("null");
+
 
     }
 
@@ -240,7 +238,7 @@ class MyLinkedListIterator<Item> implements Iterator<Item> {
 
     // Checks if the next element exists
     public boolean hasNext() {
-        return ((ndItr!= null) && (ndItr.next != null));
+        return (ndItr != null);
     }
 
     // moves the cursor/iterator to next element
