@@ -70,31 +70,34 @@ public class Deque<Item> implements Iterable<Item>{
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque<String> dq = new Deque<String>();
+        Deque<Integer> dq = new Deque<Integer>();
 
-        dq.addFirst("B");
-        dq.addFirst("C");
-        dq.addFirst("D");
+        dq.addFirst(1);
+        dq.addFirst(2);
+        dq.addFirst(3);
+        dq.addFirst(4);
+
 
         System.out.println("empty==false? = " + dq.isEmpty());
-        System.out.println("size==3? = " + dq.size());
+        System.out.println("size==4? = " + dq.size());
 
-        dq.addLast("A");
-        dq.addFirst("E");
+        //dq.addLast("A");
+        //dq.addFirst("E");
 
-
-        System.out.println(dq.toString());
-
-        dq.removeFirst();
-        dq.removeLast();
 
         System.out.println(dq.toString());
 
-        Iterator<String> itr = dq.iterator();
+        //dq.removeFirst();
+        //dq.removeLast();
+
+        System.out.println(dq.toString());
+
+        Iterator<Integer> itr = dq.iterator();
         while (itr.hasNext()) {
-            String str = itr.next();
-            System.out.println(str);
+            Integer val = itr.next();
+            System.out.print(val + " -> ");
         }
+        System.out.println(itr.next() + " -> null");
 
     }
 
@@ -113,7 +116,7 @@ class DequeIterator<Item> implements Iterator<Item> {
     }
 
     public Item next() {
-        if (!itr.hasNext()) throw new NoSuchElementException();
+        if (itr == null) throw new NoSuchElementException();
         return itr.next();
     }
 
