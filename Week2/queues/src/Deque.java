@@ -15,57 +15,57 @@ The Deque class represents a double-ended queue (or deque, pronounced "deck") of
 It is a generalization of a stack and a queue that supports adding and removing items from either
 the front or the back of the data structure.
 
-This implementation uses a generic LinkedList<> to implement to Deque data structure.
+This implementation uses a generic LinkedList<> to implement the Deque data structure.
 */
 
 public class Deque<Item> implements Iterable<Item>{
     //private LinkedList<Item> myDeck;
-    private MyLinkedList<Item> myDeck;
+    private MyLinkedList<Item> myList;
 
     // construct an empty deque
     public Deque() {
         //myDeck = new LinkedList<Item>();
-        myDeck = new MyLinkedList<Item>();
+        myList = new MyLinkedList<Item>();
     }
 
     // is the deque empty?
     public boolean isEmpty() {
-        return myDeck.isEmpty();
+        return myList.isEmpty();
     }
 
     // return the number of items on the deque
     public int size() {
-        return myDeck.size();
+        return myList.size();
     }
 
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        myDeck.addFirst(item);
+        myList.addFirst(item);
     }
 
     // add the item to the back
     public void addLast(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        myDeck.addLast(item);
+        myList.addLast(item);
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
-        if (myDeck.isEmpty()) throw new NoSuchElementException();
-        return myDeck.removeFirst();
+        if (myList.isEmpty()) throw new NoSuchElementException();
+        return myList.removeFirst();
     }
 
     // remove and return the item from the back
     public Item removeLast() {
-        if (myDeck.isEmpty()) throw new NoSuchElementException();
-        return myDeck.removeLast();
+        if (myList.isEmpty()) throw new NoSuchElementException();
+        return myList.removeLast();
     }
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
         //return myDeck.iterator();
-        return new DequeIterator<Item>(myDeck);
+        return new DequeIterator<Item>(myList);
     }
 
     // unit testing (required)
@@ -74,6 +74,8 @@ public class Deque<Item> implements Iterable<Item>{
 
         dq.addFirst(1);
         dq.addFirst(2);
+        dq.addFirst(3);
+
 
 
         //System.out.println("empty==false? = " + dq.isEmpty());
@@ -95,6 +97,9 @@ public class Deque<Item> implements Iterable<Item>{
             System.out.print(val + " -> ");
         }
         System.out.println("null");
+
+        Iterator<Integer> itr2 = dq.iterator();
+        System.out.println(itr2.toString());
 
 
     }
@@ -120,6 +125,20 @@ class DequeIterator<Item> implements Iterator<Item> {
 
     public void remove() {
         throw new UnsupportedOperationException();
+    }
+
+    public String toString() {
+        String str = null;
+        while (itr.hasNext()) {
+            Item val = itr.next();
+
+            if (str == null)
+                str = val.toString();
+            else
+                str = str + " -> " + val.toString();
+        }
+        str = str + " -> " + null;
+        return str;
     }
 }
 
@@ -243,8 +262,15 @@ class MyLinkedListIterator<Item> implements Iterator<Item> {
 
     // moves the cursor/iterator to next element
     public Item next() {
-        Item tmp = ndItr.getData();
-        ndItr = ndItr.next;
+        Item tmp = null;
+
+        if (ndItr != null) {
+            tmp = ndItr.getData();
+            ndItr = ndItr.next;
+        } else {
+            throw new NoSuchElementException();
+        }
+
         return tmp;
     }
 
