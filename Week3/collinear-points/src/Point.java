@@ -62,6 +62,8 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
+        if(that == null) throw new NullPointerException();
+
         double slope;
 
         slope = (that.y - this.y)/(that.x - this.x);
@@ -86,6 +88,8 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
+        if(that == null) throw new NullPointerException();
+
         if (this.y < that.y) return -1;
         if (this.y > that.y) return +1;
         if (this.x < that.x) return -1;
@@ -106,6 +110,8 @@ public class Point implements Comparable<Point> {
     //compare points according to their slope
     private class SlopeOrder implements Comparator<Point> {
         public int compare(Point p, Point q) {
+            if((p == null) || (q == null)) throw new NullPointerException();
+
             if (slopeTo(p) > slopeTo(q)) return +1;
             if (slopeTo(p) < slopeTo(q)) return -1;
             return 0;
