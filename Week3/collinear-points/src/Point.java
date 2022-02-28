@@ -8,13 +8,16 @@
  *
  ******************************************************************************/
 
-import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
 
     private final int x;     // x-coordinate of this point
     private final int y;     // y-coordinate of this point
+
+
 
     /**
      * Initializes a new point.
@@ -59,7 +62,15 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        /* YOUR CODE HERE */
+        double slope;
+
+        slope = (that.y - this.y)/(that.x - this.x);
+
+        if (this.y == that.y) slope = +0.0;
+        if (this.x == that.x) slope = Double.POSITIVE_INFINITY;
+        if ((this.y == that.y) && (this.x == that.x)) slope = Double.NEGATIVE_INFINITY;
+
+        return slope;
     }
 
     /**
@@ -75,7 +86,11 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        /* YOUR CODE HERE */
+        if (this.y < that.y) return -1;
+        if (this.y > that.y) return +1;
+        if (this.x < that.x) return -1;
+        if (this.x > that.x) return +1;
+        return 0;
     }
 
     /**
@@ -85,7 +100,16 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        /* YOUR CODE HERE */
+        return new SlopeOrder();
+    }
+
+    //compare points according to their slope
+    private class SlopeOrder implements Comparator<Point> {
+        public int compare(Point p, Point q) {
+            if (slopeTo(p) > slopeTo(q)) return +1;
+            if (slopeTo(p) < slopeTo(q)) return -1;
+            return 0;
+        }
     }
 
 
@@ -105,6 +129,13 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        Point p1, p2;
+
+        p1 = new Point(1, 1);
+        p2 = new Point(2, 2);
+
+        System.out.println(p1.x);
+        System.out.println(p1.compareTo(p2));
+
     }
 }
