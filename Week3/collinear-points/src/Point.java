@@ -64,13 +64,15 @@ public class Point implements Comparable<Point> {
     public double slopeTo(Point that) {
         if(that == null) throw new NullPointerException();
 
-        double slope;
+        double slope = 0;
 
-        slope = (that.y - this.y)/(that.x - this.x);
 
         if (this.y == that.y) slope = +0.0;
         if (this.x == that.x) slope = Double.POSITIVE_INFINITY;
         if ((this.y == that.y) && (this.x == that.x)) slope = Double.NEGATIVE_INFINITY;
+
+        if(this.x != that.x) slope = (double)(that.y - this.y)/(that.x - this.x);
+
 
         return slope;
     }
