@@ -2,7 +2,6 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
-
 import java.util.ArrayList;
 
 
@@ -15,7 +14,7 @@ public class BruteCollinearPoints {
 
         int n = points.length;
         lineSegs = new ArrayList<LineSegment>();
-        
+
         //check if any point is null
         for(int i = 0; i < n; ++i) {
             if (points[i] == null) throw new IllegalArgumentException();
@@ -48,7 +47,7 @@ public class BruteCollinearPoints {
                                 pts.add(points[k]);
                                 pts.add(points[l]);
 
-                                pts.sort(Point::compareTo);       // needed??
+                                pts.sort(Point::compareTo); //needed so that end points of the segment include inner points
 
                                 // check if that chosen 4-point subset is collinear: [ p0 <=> p1 <=> p2 <=> p3 ]
                                 boolean isCollinear = true;
