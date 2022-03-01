@@ -15,14 +15,15 @@ public class BruteCollinearPoints {
         lineSegs = new ArrayList<LineSegment>();
         if (points == null) throw new IllegalArgumentException();
 
-
+        //check if any point is null
         for(int i = 0; i < n; ++i) {
-            //check if any point is null
             if (points[i] == null) throw new IllegalArgumentException();
+        }
 
-            //check for any repeated point
+        //check for any repeated point
+        for(int i = 0; i < n; ++i) {
             for(int j = 1; j < n; ++j) {
-                if(i < j) {
+                if(i < j) {     // i < j, in order to avoid duplicate permutation
                     if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY)
                         throw new IllegalArgumentException();
                 }
@@ -105,7 +106,6 @@ public class BruteCollinearPoints {
             p.draw();
         }
         StdDraw.show();
-
 
         // print and draw the line segments
         StdDraw.setPenRadius(0.002);
