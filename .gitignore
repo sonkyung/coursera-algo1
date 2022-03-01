@@ -22,7 +22,8 @@
 # Directories #
 @bak
 Week3/collinear-points/data
-
+Week4/8-puzzle/data
+Week4/8-puzzle/.lift
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
