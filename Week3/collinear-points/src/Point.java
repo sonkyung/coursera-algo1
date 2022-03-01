@@ -67,11 +67,13 @@ public class Point implements Comparable<Point> {
         double slope = 0;
 
 
-        if (this.y == that.y) slope = +0.0;
         if (this.x == that.x) slope = Double.POSITIVE_INFINITY;
         if ((this.y == that.y) && (this.x == that.x)) slope = Double.NEGATIVE_INFINITY;
 
-        if(this.x != that.x) slope = (double)(that.y - this.y)/(that.x - this.x);
+        if(this.x != that.x) {
+            if (this.y == that.y) slope = +0.0;
+            else slope = (double)(that.y - this.y)/(that.x - this.x);
+        }
 
 
         return slope;
