@@ -94,11 +94,14 @@ public class Solver {
 
         if(sn_sol != null) {
             ArrayList<Board> arrB = new ArrayList<Board>();
+            ArrayList<Board> arrB_reverse = new ArrayList<Board>();
             while(sn_sol != null) {
                 arrB.add(sn_sol.b);
                 sn_sol = sn_sol.prev;
             }
-            itB = arrB;
+
+            for(int i = 0; i < arrB.size(); ++i) arrB_reverse.add(arrB.get(arrB.size() - i - 1));
+            itB = arrB_reverse;
         }
 
         return itB;
