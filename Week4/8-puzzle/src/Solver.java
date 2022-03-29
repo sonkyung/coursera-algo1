@@ -12,7 +12,8 @@ public class Solver {
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
-        initialBoard = initial;
+        if(initial != null) initialBoard = initial;
+        else throw new IllegalArgumentException();
     }
 
 
