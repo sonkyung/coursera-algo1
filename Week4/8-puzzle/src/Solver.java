@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class Solver {
-    MinPQ<SearchNode> pq;
+    private MinPQ<SearchNode> pq;
     private Board initialBoard;
 
 
