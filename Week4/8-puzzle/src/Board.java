@@ -218,7 +218,7 @@ public class Board {
 
                         ++numInd;
 
-                        if(numInd > 2) break findTwoTiles;
+                        if(numInd >= 2) break findTwoTiles;
                     }
                 }
             }
