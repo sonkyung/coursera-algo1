@@ -67,23 +67,19 @@ public class Board {
     public int manhattan() {
         int manhDist = 0;
         int targettVal;
-        int n_sq = n*n;
 
         for(int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 targettVal = i*n + j + 1;
 
-                if(targettVal < n_sq) {     // tile #(n*n) is the blank tile, don't count it
-                    if(boardTiles[i][j] != targettVal) {
-                        int tileVal = boardTiles[i][j];
-                        if (tileVal == 0) tileVal = n_sq;   // tile value of "0" corresponds to empty cell, which has equivalent value of n*n
+                if((boardTiles[i][j] != 0) && (boardTiles[i][j] != targettVal)) {
+                    int tileVal = boardTiles[i][j];
+                    
+                    int goal_i = (int)((tileVal - 1) / n);
+                    int goal_j = (tileVal - 1) % n;
 
-                        int goal_i = (int)((tileVal - 1) / n);
-                        int goal_j = (tileVal - 1) % n;
-
-                        manhDist += Math.abs(goal_i - i);
-                        manhDist += Math.abs(goal_j - j);
-                    }
+                    manhDist += Math.abs(goal_i - i);
+                    manhDist += Math.abs(goal_j - j);
                 }
 
             }
