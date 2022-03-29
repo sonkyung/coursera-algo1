@@ -36,6 +36,7 @@ public class Solver {
                 bItor.next();
                 ++numMoves;
             }
+            numMoves = numMoves - 1;    //#moves between boards, so subtract 1
         }
         else {
             numMoves = -1;
@@ -52,6 +53,10 @@ public class Solver {
 
         Iterable<Board> itB = null;
         SearchNode sn_sol = null;
+
+        if (initialBoard.isGoal()) {
+            sn_sol = sn;
+        }
 
         while(sn_sol == null) {
             //System.out.println("pq.size()=" + pq.size());
